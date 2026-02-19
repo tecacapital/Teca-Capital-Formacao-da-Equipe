@@ -6,60 +6,306 @@
     <link rel="shortcut icon" href="Teca Capital favicon.png" type="image/x-icon">
     <title>Teca Capital - Site de Formação da Equipe</title>
 
-    <link rel="stylesheet" href="style.css">
+    <!-- FONT AWESOME PARA ÍCONES -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- ARQUIVOS JS -->
+    <script src="javascript/formacao-teca-capital.js" defer></script>
+
+    <!-- CSS CONTEUDO PRINCIPAL -->
+    <link rel="stylesheet" href="CSS/formacao-teca-capital.css">
     
 </head>
 <body>
 
-     <header>
+    <header class="site-header">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Teca Capital favicon.png" 
+                     alt="Teca Capital" 
+                     class="site-logo">
+            </a>
+        </div>
+    </header>
 
-
-     </header>
-
-     <main>
-        <!-- SEÇÃO 1: HERO/BANNER PRINCIPAL -->
+    <main>
+        <!-- ============================================ -->
+        <!-- SEÇÃO 1: HERO/BANNER PRINCIPAL (APERFEIÇOADO) -->
+        <!-- ============================================ -->
         <section class="hero-section fade-in">
             <div class="hero-background">
                 <img src="Imagem promocional Teca Capital Atualizado.png" width="100%" alt="imagem promocional teca capital">
+                <div class="hero-overlay"></div>
             </div>
 
             <div class="hero-content container">
-                <h1 class="hero-title">Formar para <span class="highlight">Executar.</span> Executar para <span class="highlight">Crescer.</span></h1>
+                <h1 class="hero-title">Formar para <span class="highlight">Executar.</span> <br>Executar para <span class="highlight">Crescer.</span></h1>
                 <p class="hero-subtitle">A primeira plataforma angolana de educação prática através de simulações</p>
             
-                
                 <div class="stats-container">
                     <div class="stat-card">
                         <div class="stat-number" data-target="1250">5</div>
-                        <div class="stat-label">Nº de Membros</div>
+                        <div class="stat-label">Membros da Equipa</div>
                     </div>
                     <div class="stat-card">
                         <div class="stat-number" data-target="4">4</div>
-                        <div class="stat-label">Alvos</div>
+                        <div class="stat-label">Alvos Estratégicos</div>
                     </div>
-    
                     <div class="stat-card">
                         <div class="stat-number" data-target="12">0</div>
-                        <div class="stat-label">Conteúdos</div>
+                        <div class="stat-label">Conteúdos Formativos</div>
                     </div>
-
                     <div class="stat-card">
                         <div class="stat-number" data-target="5">0</div>
-                        <div class="stat-label">Parceiros a alcançar</div>
+                        <div class="stat-label">Parceiros a Alcançar</div>
                     </div>
                 </div>
             </div>
         </section>
-        <p>Este espaço foi criado para capacitar os membros da equipa da Teca Capital com conhecimento estratégico, técnico e comercial. Aqui encontrarás os conteúdos oficiais áudios, documentos, vídeos e materiais práticos que explicam o modelo de negócio, as estratégias de venda, os processos operacionais e os padrões de atuação. O domínio deste conteúdo é obrigatório para representar a Teca Capital no mercado com profissionalismo, clareza e consistência.</p>
 
-        <section classe>
-
+        <!-- ============================================ -->
+        <!-- SEÇÃO 2: TEXTO DE INTRODUÇÃO (REPOSICIONADO) -->
+        <!-- ============================================ -->
+        <section class="intro-section">
+            <div class="container">
+                <div class="intro-card card-animated">
+                    <i class="fas fa-quote-left quote-icon"></i>
+                    <p class="intro-text">Este espaço foi criado para capacitar os membros da equipa da Teca Capital com conhecimento estratégico, técnico e comercial. Aqui encontrarás os conteúdos oficiais — áudios, documentos, vídeos e materiais práticos — que explicam o modelo de negócio, as estratégias de venda, os processos operacionais e os padrões de atuação. O domínio deste conteúdo é <span class="highlight">obrigatório</span> para representar a Teca Capital no mercado com profissionalismo, clareza e consistência.</p>
+                </div>
+            </div>
         </section>
 
+        <!-- ============================================ -->
+        <!-- SEÇÃO 3: APRESENTAÇÃO DA TECA CAPITAL -->
+        <!-- ============================================ -->
+        <section class="content-section apresentacao-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Apresentação da <span class="highlight">Teca Capital</span></h2>
+                    <p class="section-subtitle">O que somos? O que fazemos? Para onde vamos?</p>
+                </div>
+                
+                <div class="content-grid">
+                    <!-- Card 1: Infográfico -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-chart-pie card-icon"></i>
+                            <h3>Infográfico Estratégico</h3>
+                        </div>
+                        <div class="card-image">
+                            <img src="Instituição/Teca Capital - Guia Estratégico Infográfico.png" alt="Infográfico Teca Capital" loading="lazy">
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2: Vídeo Apresentação -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-video card-icon"></i>
+                            <h3>O que é a Teca Capital</h3>
+                        </div>
+                        <div class="card-video">
+                            <video src="Instituição/videoplayback.mp4" controls preload="metadata"></video>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: Podcast Estratégico -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-podcast card-icon"></i>
+                            <h3>Podcast Estratégico</h3>
+                        </div>
+                        <div class="card-audio">
+                            <audio src="Instituição/Revolucionar_a_educação_angolana_com_simuladores.m4a" controls preload="none"></audio>
+                            <p class="audio-caption">A revolução na educação angolana</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4: SLIDE DE IMAGENS (FUNCIONAL) -->
+                    <div class="content-card card-animated slider-card">
+                        <div class="card-header">
+                            <i class="fas fa-images card-icon"></i>
+                            <h3>Apresentação em Slide</h3>
+                        </div>
+                        <div class="slider-container" id="slider-apresentacao">
+                            <div class="slider-track" id="track-apresentacao">
+                                <!-- Imagens serão inseridas dinamicamente via JS -->
+                            </div>
+                            <button class="slider-nav slider-prev" data-slider="apresentacao" aria-label="Slide anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav slider-next" data-slider="apresentacao" aria-label="Próximo slide">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <div class="slider-indicators" id="indicators-apresentacao"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 5: E-book Guia Estratégico -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-book card-icon"></i>
+                            <h3>Guia Estratégico</h3>
+                        </div>
+                        <div class="card-ebook">
+                            <a href="Instituição/Guia Estratégico Teca Capital.pdf" class="btn btn-primary" target="_blank" rel="noopener">
+                                <i class="fas fa-file-pdf"></i> Ler o arquivo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-     </main>
+        <!-- ============================================ -->
+        <!-- SEÇÃO 4: GUIA DE VENDAS -->
+        <!-- ============================================ -->
+        <section class="content-section vendas-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Guia de <span class="highlight">Vendas</span></h2>
+                    <p class="section-subtitle">Como convencer o cliente a fechar connosco</p>
+                </div>
+                
+                <div class="content-grid">
+                    <!-- Card 1: Vídeo de Venda -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-video card-icon"></i>
+                            <h3>Teca Capital Vídeo de Venda</h3>
+                        </div>
+                        <div class="card-video">
+                            <video src="Vendas/Venda_Teca_Capital__O_Guia.mp4" controls preload="metadata"></video>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2: Podcast de Venda -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-podcast card-icon"></i>
+                            <h3>Podcast Estratégico de Venda</h3>
+                        </div>
+                        <div class="card-audio">
+                            <audio src="Vendas/Os_Segredos_do_Roteiro_da_Teca_Capital.m4a" controls preload="none"></audio>
+                            <p class="audio-caption">Os Segredos do Roteiro da Teca Capital</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3: SLIDE DE IMAGENS (FUNCIONAL) -->
+                    <div class="content-card card-animated slider-card">
+                        <div class="card-header">
+                            <i class="fas fa-images card-icon"></i>
+                            <h3>Estratégia de Venda em Slide</h3>
+                        </div>
+                        <div class="slider-container" id="slider-vendas">
+                            <div class="slider-track" id="track-vendas">
+                                <!-- Imagens serão inseridas dinamicamente via JS -->
+                            </div>
+                            <button class="slider-nav slider-prev" data-slider="vendas" aria-label="Slide anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="slider-nav slider-next" data-slider="vendas" aria-label="Próximo slide">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <div class="slider-indicators" id="indicators-vendas"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 4: E-book de Vendas -->
+                    <div class="content-card card-animated">
+                        <div class="card-header">
+                            <i class="fas fa-book card-icon"></i>
+                            <h3>Guia de Venda Completo</h3>
+                        </div>
+                        <div class="card-ebook">
+                            <a href="Vendas/GUIA DE VENDA TECA CAPITAL.pdf" class="btn btn-primary" target="_blank" rel="noopener">
+                                <i class="fas fa-file-pdf"></i> Ler o arquivo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-     <footer>
+        <!-- ============================================ -->
+        <!-- SEÇÃO 5: BENEFÍCIOS DA FORMAÇÃO (CRIADA) -->
+        <!-- ============================================ -->
+        <section class="benefits-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Por que esta <span class="highlight">formação</span> é essencial?</h2>
+                    <p class="section-subtitle">Domine todos os aspectos para representar a Teca Capital com excelência</p>
+                </div>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3>Conhecimento Estratégico</h3>
+                        <p>Compreenda profundamente o modelo de negócio, a visão e os objetivos da Teca Capital para atuar com alinhamento estratégico.</p>
+                    </div>
+                    
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Técnicas de Venda</h3>
+                        <p>Domine as estratégias de vendas, argumentação e negociação para converter leads em clientes com confiança.</p>
+                    </div>
+                    
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-gear"></i>
+                        </div>
+                        <h3>Processos Operacionais</h3>
+                        <p>Aprenda os fluxos de trabalho, padrões de atendimento e procedimentos internos que garantem excelência operacional.</p>
+                    </div>
+                    
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-medal"></i>
+                        </div>
+                        <h3>Padrões de Atuação</h3>
+                        <p>Represente a Teca Capital no mercado com profissionalismo, clareza e consistência em todas as interações.</p>
+                    </div>
+                    
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>Crescimento Contínuo</h3>
+                        <p>Mantenha-se atualizado com conteúdos novos e aprimore constantemente suas habilidades e conhecimentos.</p>
+                    </div>
+                    
+                    <div class="benefit-card card-animated">
+                        <div class="benefit-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Trabalho em Equipa</h3>
+                        <p>Alinhe-se com os valores e a cultura da Teca Capital, fortalecendo o espírito de equipa e colaboração.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- SEÇÃO 6: CTA FINAL (OPCIONAL - PODE SER REMOVIDO) -->
+        <!-- ============================================ -->
+        <section class="cta-section">
+            <div class="container">
+                <div class="cta-content card-animated">
+                    <h2 class="cta-title">Pronto para <span class="highlight">executar</span> com excelência?</h2>
+                    <p class="cta-text">Domine todo o conteúdo e torne-se um representante oficial da Teca Capital.</p>
+                    <a href="#top" class="btn btn-primary btn-large">
+                        <i class="fas fa-arrow-up"></i> Voltar ao topo
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
         <div class="footer-content container">
             <div class="footer-section social-section">
                 <h3>Redes Sociais</h3>
@@ -107,8 +353,7 @@
                 </p>
             </div>
         </div>
-
-     </footer>
+    </footer>
 
 </body>
 </html>
