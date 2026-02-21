@@ -444,3 +444,572 @@
  * FIM DO SISTEMA FORMAÇÃO TECA CAPITAL
  * ============================================
  */
+
+/**
+ * ============================================
+ * TECA LIGHTBOX v1.0.0
+ * Visualizador de Imagens em Tela Cheia
+ * Teca Capital - Formação da Equipe
+ * ============================================
+ * 
+ * Funcionalidades:
+ * - Visualização de imagens em tela cheia
+ * - Navegação entre imagens do mesmo conjunto
+ * - Suporte a teclado (ESC, ←, →)
+ * - Suporte a swipe em dispositivos móveis
+ * - Agrupamento automático por contexto
+ * - Design consistente com identidade Teca Capital
+ * 
+ * @author Teca Capital
+ * @license Proprietary
+ */
+
+(function() {
+    'use strict';
+
+    class TecaLightbox {
+        /**
+         * Construtor da classe
+         * @param {Object} options - Opções de configuração
+         */
+        constructor(options = {}) {
+            // Configurações padrão
+            this.config = {
+                animationDuration: 300,
+                swipeThreshold: 50,
+                enableKeyboard: true,
+                enableSwipe: true,
+                enableCaption: true,
+                enableCounter: true,
+                closeOnOverlay: true,
+                ...options
+            };
+
+            // Propriedades internas
+            this.version = '1.0.0';
+            this.images = [];
+            this.currentSet = [];
+            this.currentIndex = 0;
+            this.modal = null;
+            this.isOpen = false;
+            this.touchStartX = 0;
+            this.touchEndX = 0;
+            this.swipeInProgress = false;
+
+            // Bind dos métodos
+            this.openLightbox = this.openLightbox.bind(this);
+            this.closeLightbox = this.closeLightbox.bind(this);
+            this.nextImage = this.nextImage.bind(this);
+            this.prevImage = this.prevImage.bind(this);
+            this.handleKeyDown = this.handleKeyDown.bind(this);
+            this.handleTouchStart = this.handleTouchStart.bind(this);
+            this.handleTouchEnd = this.handleTouchEnd.bind(this);
+            this.handleResize = this.handleResize.bind(this);
+
+            // Inicializar
+            this.init();
+        }
+
+        /**
+         * Inicialização do lightbox
+         */
+        init() {
+            this.createModal();
+            this.scanImages();
+            this.bindEvents();
+            this.setupKeyboardEvents();
+            this.setupTouchEvents();
+            
+            console.log(`✨ TecaLightbox v${this.version} inicializado com sucesso`);
+            console.log(`📸 ${this.images.length} imagens preparadas para visualização`);
+        }
+
+        /**
+         * Cria a estrutura do modal
+         */
+        createModal() {
+            // Verificar se já existe
+            if (document.getElementById('tecaLightbox')) {
+                this.modal = document.getElementById('tecaLightbox');
+                return;
+            }
+
+            // Criar elemento do modal
+            this.modal = document.createElement('div');
+            this.modal.className = 'teca-lightbox';
+            this.modal.id = 'tecaLightbox';
+            this.modal.setAttribute('aria-hidden', 'true');
+            this.modal.setAttribute('role', 'dialog');
+            this.modal.setAttribute('aria-modal', 'true');
+            this.modal.setAttribute('aria-label', 'Visualizador de imagens em tela cheia');
+
+            // Estrutura HTML do modal
+            this.modal.innerHTML = `
+                <div class="lightbox-overlay" data-lightbox-close></div>
+                <div class="lightbox-container">
+                    <button class="lightbox-close" data-lightbox-close aria-label="Fechar visualizador">
+                        <i class="fas fa-times" aria-hidden="true"></i>
+                    </button>
+                    
+                    <button class="lightbox-nav lightbox-prev" aria-label="Imagem anterior" data-lightbox-prev>
+                        <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="lightbox-content">
+                        <img src="" alt="" class="lightbox-image" loading="lazy">
+                        <div class="lightbox-caption"></div>
+                    </div>
+                    
+                    <button class="lightbox-nav lightbox-next" aria-label="Próxima imagem" data-lightbox-next>
+                        <i class="fas fa-chevron-right" aria-hidden="true"></i>
+                    </button>
+                    
+                    <div class="lightbox-counter" aria-live="polite">
+                        <span class="current">1</span> / <span class="total">1</span>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(this.modal);
+        }
+
+        /**
+         * Escaneia todas as imagens da página
+         */
+        scanImages() {
+            // Encontrar todas as imagens
+            const allImages = document.querySelectorAll('img:not(.lightbox-ignore)');
+            
+            this.images = Array.from(allImages)
+                .map((img, index) => {
+                    // Ignorar imagens muito pequenas (prováveis ícones)
+                    if (img.width < 50 && img.height < 50 && !img.closest('.slider-container')) {
+                        return null;
+                    }
+
+                    // Adicionar classes e atributos
+                    img.classList.add('lightbox-trigger');
+                    img.setAttribute('data-lightbox-index', index);
+                    
+                    // Determinar conjunto
+                    const set = this.determineImageSet(img);
+                    
+                    return {
+                        element: img,
+                        src: img.src,
+                        alt: img.alt || 'Imagem Teca Capital',
+                        set: set,
+                        index: index,
+                        width: img.naturalWidth,
+                        height: img.naturalHeight,
+                        title: img.title || img.alt || ''
+                    };
+                })
+                .filter(img => img !== null);
+
+            // Agrupar por conjunto
+            this.imageSets = this.groupImagesBySet(this.images);
+        }
+
+        /**
+         * Determina o conjunto de uma imagem
+         * @param {HTMLImageElement} img 
+         * @returns {string} Identificador do conjunto
+         */
+        determineImageSet(img) {
+            // Verificar se está em um slider
+            const slider = img.closest('.slider-container, [class*="slider"], [id*="slider"]');
+            if (slider) {
+                return slider.id || `slider-${slider.className.replace(/\s+/g, '-')}`;
+            }
+
+            // Verificar se está em um card
+            const card = img.closest('.content-card, .card, [class*="card"]');
+            if (card) {
+                return card.id || `card-${card.className.replace(/\s+/g, '-')}`;
+            }
+
+            // Verificar se está em uma seção
+            const section = img.closest('section');
+            if (section) {
+                return section.id || `section-${section.className.replace(/\s+/g, '-')}`;
+            }
+
+            // Conjunto individual
+            return `single-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        }
+
+        /**
+         * Agrupa imagens por conjunto
+         * @param {Array} images 
+         * @returns {Object} Imagens agrupadas
+         */
+        groupImagesBySet(images) {
+            const sets = {};
+            
+            images.forEach(img => {
+                if (!sets[img.set]) {
+                    sets[img.set] = [];
+                }
+                sets[img.set].push(img);
+            });
+
+            return sets;
+        }
+
+        /**
+         * Configura os eventos principais
+         */
+        bindEvents() {
+            // Delegar eventos para todas as imagens
+            document.addEventListener('click', (e) => {
+                const img = e.target.closest('img.lightbox-trigger');
+                if (img) {
+                    e.preventDefault();
+                    this.openLightbox(img);
+                }
+            });
+
+            // Botão fechar e overlay
+            const closeButtons = this.modal.querySelectorAll('[data-lightbox-close]');
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', this.closeLightbox);
+            });
+
+            // Navegação
+            const prevBtn = this.modal.querySelector('[data-lightbox-prev]');
+            const nextBtn = this.modal.querySelector('[data-lightbox-next]');
+            
+            if (prevBtn) {
+                prevBtn.addEventListener('click', this.prevImage);
+            }
+            
+            if (nextBtn) {
+                nextBtn.addEventListener('click', this.nextImage);
+            }
+
+            // Evento de resize
+            window.addEventListener('resize', this.handleResize);
+        }
+
+        /**
+         * Configura eventos de teclado
+         */
+        setupKeyboardEvents() {
+            if (!this.config.enableKeyboard) return;
+            
+            document.addEventListener('keydown', this.handleKeyDown);
+        }
+
+        /**
+         * Configura eventos de touch para swipe
+         */
+        setupTouchEvents() {
+            if (!this.config.enableSwipe) return;
+
+            this.modal.addEventListener('touchstart', this.handleTouchStart, { passive: true });
+            this.modal.addEventListener('touchmove', (e) => {
+                if (this.swipeInProgress) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            this.modal.addEventListener('touchend', this.handleTouchEnd, { passive: true });
+        }
+
+        /**
+         * Handler para teclado
+         * @param {KeyboardEvent} e 
+         */
+        handleKeyDown(e) {
+            if (!this.isOpen) return;
+
+            switch(e.key) {
+                case 'Escape':
+                    e.preventDefault();
+                    this.closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    this.prevImage();
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    this.nextImage();
+                    break;
+            }
+        }
+
+        /**
+         * Handler para touch start
+         * @param {TouchEvent} e 
+         */
+        handleTouchStart(e) {
+            this.touchStartX = e.changedTouches[0].screenX;
+            this.swipeInProgress = true;
+        }
+
+        /**
+         * Handler para touch end
+         * @param {TouchEvent} e 
+         */
+        handleTouchEnd(e) {
+            this.touchEndX = e.changedTouches[0].screenX;
+            this.handleSwipe();
+            this.swipeInProgress = false;
+        }
+
+        /**
+         * Handler para resize da janela
+         */
+        handleResize() {
+            if (this.isOpen) {
+                // Re-centralizar imagem
+                const img = this.modal.querySelector('.lightbox-image');
+                if (img) {
+                    img.style.maxHeight = `${window.innerHeight * 0.75}px`;
+                }
+            }
+        }
+
+        /**
+         * Processa o swipe
+         */
+        handleSwipe() {
+            const diff = this.touchStartX - this.touchEndX;
+            
+            if (Math.abs(diff) < this.config.swipeThreshold) return;
+
+            if (diff > 0) {
+                this.nextImage();
+            } else {
+                this.prevImage();
+            }
+        }
+
+        /**
+         * Abre o lightbox com uma imagem específica
+         * @param {HTMLImageElement} imageElement 
+         */
+        openLightbox(imageElement) {
+            const imageData = this.images.find(img => img.element === imageElement);
+            if (!imageData) return;
+
+            // Encontrar todas as imagens do mesmo conjunto
+            this.currentSet = this.images.filter(img => img.set === imageData.set);
+            this.currentIndex = this.currentSet.findIndex(img => img.element === imageElement);
+
+            // Atualizar conteúdo
+            this.updateModalContent();
+
+            // Mostrar modal
+            this.modal.classList.add('active');
+            document.body.classList.add('lightbox-open');
+            this.isOpen = true;
+
+            // Atualizar navegação
+            this.updateNavigation();
+
+            // Pre-carregar imagens adjacentes
+            this.preloadAdjacentImages();
+
+            console.log(`🔍 Visualizando imagem ${this.currentIndex + 1} de ${this.currentSet.length}`);
+        }
+
+        /**
+         * Fecha o lightbox
+         */
+        closeLightbox() {
+            this.modal.classList.remove('active');
+            document.body.classList.remove('lightbox-open');
+            this.isOpen = false;
+
+            // Limpar imagem após animação
+            setTimeout(() => {
+                if (!this.isOpen) {
+                    const modalImg = this.modal.querySelector('.lightbox-image');
+                    modalImg.src = '';
+                    modalImg.alt = '';
+                    
+                    const caption = this.modal.querySelector('.lightbox-caption');
+                    caption.textContent = '';
+                }
+            }, this.config.animationDuration);
+        }
+
+        /**
+         * Navega para a próxima imagem
+         */
+        nextImage() {
+            if (this.currentIndex < this.currentSet.length - 1) {
+                this.currentIndex++;
+                this.updateModalContent();
+                this.preloadAdjacentImages();
+            }
+        }
+
+        /**
+         * Navega para a imagem anterior
+         */
+        prevImage() {
+            if (this.currentIndex > 0) {
+                this.currentIndex--;
+                this.updateModalContent();
+                this.preloadAdjacentImages();
+            }
+        }
+
+        /**
+         * Atualiza o conteúdo do modal
+         */
+        updateModalContent() {
+            const image = this.currentSet[this.currentIndex];
+            const modalImg = this.modal.querySelector('.lightbox-image');
+            const caption = this.modal.querySelector('.lightbox-caption');
+            const counter = this.modal.querySelector('.lightbox-counter');
+
+            // Adicionar classe de loading
+            modalImg.classList.add('loading');
+
+            // Atualizar imagem
+            modalImg.src = image.src;
+            modalImg.alt = image.alt;
+            
+            // Remover loading quando carregada
+            modalImg.onload = () => {
+                modalImg.classList.remove('loading');
+                modalImg.classList.add('loaded');
+            };
+
+            // Atualizar legenda
+            if (this.config.enableCaption) {
+                caption.textContent = image.alt;
+            }
+
+            // Atualizar contador
+            if (this.config.enableCounter && this.currentSet.length > 1) {
+                counter.style.display = 'block';
+                counter.innerHTML = `
+                    <span class="current">${this.currentIndex + 1}</span> / 
+                    <span class="total">${this.currentSet.length}</span>
+                `;
+            } else {
+                counter.style.display = 'none';
+            }
+
+            this.updateNavigation();
+        }
+
+        /**
+         * Atualiza o estado dos botões de navegação
+         */
+        updateNavigation() {
+            const prevBtn = this.modal.querySelector('[data-lightbox-prev]');
+            const nextBtn = this.modal.querySelector('[data-lightbox-next]');
+
+            if (this.currentSet.length <= 1) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+                return;
+            }
+
+            if (prevBtn) {
+                prevBtn.style.display = 'flex';
+                prevBtn.disabled = this.currentIndex === 0;
+            }
+
+            if (nextBtn) {
+                nextBtn.style.display = 'flex';
+                nextBtn.disabled = this.currentIndex === this.currentSet.length - 1;
+            }
+        }
+
+        /**
+         * Pré-carrega imagens adjacentes
+         */
+        preloadAdjacentImages() {
+            const indices = [
+                this.currentIndex - 1,
+                this.currentIndex + 1
+            ];
+
+            indices.forEach(index => {
+                if (index >= 0 && index < this.currentSet.length) {
+                    const img = new Image();
+                    img.src = this.currentSet[index].src;
+                }
+            });
+        }
+
+        /**
+         * Atualiza o escaneamento de imagens
+         * Útil para imagens carregadas dinamicamente
+         */
+        refresh() {
+            this.scanImages();
+            console.log(`🔄 Lightbox atualizado: ${this.images.length} imagens encontradas`);
+        }
+
+        /**
+         * Destrói a instância e limpa recursos
+         */
+        destroy() {
+            // Remover event listeners
+            document.removeEventListener('keydown', this.handleKeyDown);
+            window.removeEventListener('resize', this.handleResize);
+
+            // Remover modal
+            if (this.modal && this.modal.parentNode) {
+                this.modal.parentNode.removeChild(this.modal);
+            }
+
+            // Remover classes das imagens
+            document.querySelectorAll('img.lightbox-trigger').forEach(img => {
+                img.classList.remove('lightbox-trigger');
+                img.removeAttribute('data-lightbox-index');
+            });
+
+            console.log('👋 TecaLightbox finalizado');
+        }
+    }
+
+    // ============================================
+    // INICIALIZAÇÃO AUTOMÁTICA
+    // ============================================
+
+    /**
+     * Inicializa o lightbox quando o DOM estiver pronto
+     */
+    function initLightbox() {
+        // Verificar se já existe uma instância
+        if (window.tecaLightbox) {
+            console.warn('⚠️ TecaLightbox já está inicializado');
+            return;
+        }
+
+        // Criar instância
+        window.tecaLightbox = new TecaLightbox({
+            animationDuration: 300,
+            swipeThreshold: 50,
+            enableKeyboard: true,
+            enableSwipe: true,
+            enableCaption: true,
+            enableCounter: true,
+            closeOnOverlay: true
+        });
+    }
+
+    // Inicializar baseado no estado do documento
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initLightbox);
+    } else {
+        // DOM já está carregado
+        initLightbox();
+    }
+
+    // ============================================
+    // EXPOR API PÚBLICA
+    // ============================================
+
+    window.TecaLightbox = TecaLightbox;
+
+})();
