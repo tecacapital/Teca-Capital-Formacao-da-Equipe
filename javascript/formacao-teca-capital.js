@@ -1406,3 +1406,918 @@
     }
 
 })();
+
+/**
+ * ============================================
+ * QUIZ TECA CAPITAL v1.0.0
+ * Sistema de Avaliação Gamificado
+ * ============================================
+ */
+
+(function() {
+    'use strict';
+
+    class QuizTecaCapital {
+        constructor() {
+            this.participante = {
+                nome: '',
+                genero: '',
+                provincia: ''
+            };
+            
+            this.questoes = [];
+            this.questoesRespondidas = [];
+            this.indiceAtual = 0;
+            this.acertos = 0;
+            this.erros = 0;
+            this.respostasUsuario = [];
+            
+            this.init();
+        }
+
+        init() {
+            this.carregarQuestoes();
+            this.bindEvents();
+        }
+
+        carregarQuestoes() {
+            this.questoes = [
+                // ========== PARTE 1: CONHECIMENTO TECA CAPITAL (20 questões) ==========
+                {
+                    parte: 1,
+                    numero: 1,
+                    pergunta: "O que define a Teca Capital como uma EdTech?",
+                    opcoes: [
+                        "A) Uma escola tradicional de ensino presencial",
+                        "B) Uma startup de tecnologia educacional que foca na aprendizagem prática através de simuladores",
+                        "C) Uma plataforma de vídeos educacionais gravados",
+                        "D) Uma consultoria empresarial comum"
+                    ],
+                    correta: 1, // Índice 1 = opção B
+                    explicacao: "A Teca Capital é uma startup de tecnologia educacional que foca na aprendizagem prática, permitindo que os utilizadores experimentem fenómenos económicos e empresariais em ambientes simulados."
+                },
+                {
+                    parte: 1,
+                    numero: 2,
+                    pergunta: "Qual é a estrutura jurídica atual da empresa?",
+                    opcoes: [
+                        "A) Uma sociedade anônima com múltiplos acionistas",
+                        "B) Uma marca pessoal representada pelo fundador Alberto Teca Tomás",
+                        "C) Uma organização não governamental (ONG)",
+                        "D) Uma empresa pública estatal"
+                    ],
+                    correta: 1,
+                    explicacao: "Atualmente, a Teca Capital atua como uma marca pessoal representada pelo seu fundador, Alberto Teca Tomás, utilizando o seu NIF ativo e regularizado na AGT."
+                },
+                {
+                    parte: 1,
+                    numero: 3,
+                    pergunta: "Quais são os quatro pilares de serviços oferecidos pela Teca Capital?",
+                    opcoes: [
+                        "A) Marketing, Vendas, RH e Finanças",
+                        "B) Acesso a Simuladores, Cursos Online, Formações Presenciais e Serviços Personalizados",
+                        "C) Consultoria, Auditoria, Contabilidade e Legalização",
+                        "D) Eventos, Palestras, Workshops e Seminários"
+                    ],
+                    correta: 1,
+                    explicacao: "Os serviços dividem-se em: Acesso a Simuladores e Biblioteca Digital (1º Pilar), Cursos Online (2º Pilar), Formações Presenciais para instituições (3º Pilar) e Serviços Personalizados (4º Pilar)."
+                },
+                {
+                    parte: 1,
+                    numero: 4,
+                    pergunta: "Como funciona o acesso ao primeiro pilar de serviços?",
+                    opcoes: [
+                        "A) Acesso vitalício por 50.000 Kz",
+                        "B) Acesso mensal por 2.500 Kz",
+                        "C) Acesso de 90 dias por 7.500 Kz com simuladores e biblioteca multimédia",
+                        "D) Acesso gratuito com limitação de funcionalidades"
+                    ],
+                    correta: 2,
+                    explicacao: "Por um valor a partir de 7.500 Kz, o utilizador tem acesso de 90 dias à plataforma, incluindo biblioteca multimédia completa e simuladores interativos."
+                },
+                {
+                    parte: 1,
+                    numero: 5,
+                    pergunta: "O que oferecem os cursos online personalizados de valor superior?",
+                    opcoes: [
+                        "A) Apenas certificado digital",
+                        "B) Videoaulas gravadas sem suporte",
+                        "C) Orientação prática detalhada, acesso vitalício a grupo VIP, análises macroeconómicas e eventos exclusivos",
+                        "D) Material impresso enviado por correio"
+                    ],
+                    correta: 2,
+                    explicacao: "Estes cursos, de aproximadamente 50.000 Kz, incluem orientação prática detalhada, acesso vitalício a um grupo VIP, análises macroeconómicas e convites para eventos exclusivos."
+                },
+                {
+                    parte: 1,
+                    numero: 6,
+                    pergunta: "Qual é a proposta de valor para as instituições parceiras no 3º Pilar?",
+                    opcoes: [
+                        "A) Desconto em compras futuras",
+                        "B) Apenas marketing gratuito",
+                        "C) Bónus financeiros, prestígio e diferenciação no mercado por serem pioneiras no uso de simuladores",
+                        "D) Participação em eventos internacionais"
+                    ],
+                    correta: 2,
+                    explicacao: "As instituições recebem bónus financeiros, prestígio e diferenciação no mercado por serem pioneiras no uso de simuladores práticos em Angola."
+                },
+                {
+                    parte: 1,
+                    numero: 7,
+                    pergunta: "Quanto podem lucrar os primeiros dez parceiros institucionais?",
+                    opcoes: [
+                        "A) Entre 5% e 10%",
+                        "B) Entre 25% e 50% dependendo do número de inscritos",
+                        "C) Valor fixo de 100.000 Kz por mês",
+                        "D) Apenas 1% do faturamento total"
+                    ],
+                    correta: 1,
+                    explicacao: "Para os primeiros 10 parceiros estratégicos, a participação nos lucros pode variar entre 25% e 50%, dependendo do número de inscritos."
+                },
+                {
+                    parte: 1,
+                    numero: 8,
+                    pergunta: "O que engloba o serviço de criação de software personalizado?",
+                    opcoes: [
+                        "A) Apenas hospedagem de sites",
+                        "B) Desenvolvimento de soluções sob medida com valor mínimo entre 4 a 5 milhões de Kz",
+                        "C) Manutenção de computadores",
+                        "D) Criação de redes sociais"
+                    ],
+                    correta: 1,
+                    explicacao: "Destinado a quem precisa de soluções sob medida, este serviço tem um valor mínimo de referência entre 4 a 5 milhões de Kz, desenvolvendo a solução com base na necessidade específica do cliente."
+                },
+                {
+                    parte: 1,
+                    numero: 9,
+                    pergunta: "Quais são as metas de faturação e alcance até ao final de 2026?",
+                    opcoes: [
+                        "A) Formar 1.000 pessoas e faturar 10 milhões",
+                        "B) Formar 5.000 pessoas e faturar 30 milhões",
+                        "C) Formar 10.000 pessoas e faturar entre 50 e 100 milhões de Kz",
+                        "D) Formar 20.000 pessoas e faturar 200 milhões"
+                    ],
+                    correta: 2,
+                    explicacao: "A startup pretende formar pelo menos 10.000 pessoas e atingir uma faturação líquida mínima entre 50 e 100 milhões de Kz."
+                },
+                {
+                    parte: 1,
+                    numero: 10,
+                    pergunta: "Qual é o vínculo laboral dos colaboradores nesta fase inicial?",
+                    opcoes: [
+                        "A) Contrato de trabalho efetivo",
+                        "B) Estágio profissional obrigatório",
+                        "C) Freelancers ou trabalhadores por conta própria, sem vínculo laboral tradicional",
+                        "D) Sócios proprietários"
+                    ],
+                    correta: 2,
+                    explicacao: "Com exceção do fundador, todos os membros atuam como freelancers ou trabalhadores por conta própria, sem vínculo laboral tradicional."
+                },
+                {
+                    parte: 1,
+                    numero: 11,
+                    pergunta: "Como é tratada a retenção de impostos sobre o rendimento dos colaboradores?",
+                    opcoes: [
+                        "A) Não há retenção de impostos",
+                        "B) O colaborador paga tudo sozinho",
+                        "C) A Teca Capital retém 6,5% de IRT no ato do pagamento",
+                        "D) Retenção de 20% para segurança social"
+                    ],
+                    correta: 2,
+                    explicacao: "A Teca Capital retém 6,5% de IRT no ato do pagamento ao colaborador, entregando esse valor à AGT para garantir a conformidade fiscal."
+                },
+                {
+                    parte: 1,
+                    numero: 12,
+                    pergunta: "Que impostos incidem sobre os serviços prestados pela Teca Capital?",
+                    opcoes: [
+                        "A) Apenas IVA de 14%",
+                        "B) IRT de 6,5% (retido pelo cliente) e Imposto de Selo de 7% (responsabilidade da Teca)",
+                        "C) Imposto industrial de 30%",
+                        "D) Nenhum imposto, é isenta"
+                    ],
+                    correta: 1,
+                    explicacao: "Cada serviço está sujeito à retenção de 6,5% de IRT (pela instituição cliente) e ao pagamento de 7% de Imposto de Selo (responsabilidade da Teca Capital)."
+                },
+                {
+                    parte: 1,
+                    numero: 13,
+                    pergunta: "Como será a distribuição de bónus quando a equipa crescer?",
+                    opcoes: [
+                        "A) Divisão igual para todos",
+                        "B) Por funções: Líder 20%, Formador 17%, Assistente Escritório 10%, Assistente Campo 8%",
+                        "C) Apenas o líder recebe",
+                        "D) Sorteio entre os membros"
+                    ],
+                    correta: 1,
+                    explicacao: "A distribuição será por funções: Líder recebe cerca de 20%, Formador 17%, Assistente de Escritório 10% e Assistente de Campo 8%."
+                },
+                {
+                    parte: 1,
+                    numero: 14,
+                    pergunta: "Qual é o objetivo do primeiro ciclo operacional (fevereiro/março 2026)?",
+                    opcoes: [
+                        "A) Abrir 10 lojas físicas",
+                        "B) Contratar 50 funcionários",
+                        "C) Fechar parcerias com 4 instituições, 4 formações presenciais, 1.000 inscritos e faturação entre 5 e 7 milhões",
+                        "D) Lançar aplicativo mobile"
+                    ],
+                    correta: 2,
+                    explicacao: "A meta é fechar parcerias com 4 instituições, realizar 4 formações presenciais, visando 1.000 inscritos e faturação entre 5 e 7 milhões de Kz."
+                },
+                {
+                    parte: 1,
+                    numero: 15,
+                    pergunta: "Como é garantida a segurança no acesso dos alunos inscritos?",
+                    opcoes: [
+                        "A) Senha única para todos",
+                        "B) Código de acesso único visível por 60 segundos no momento da inscrição",
+                        "C) Acesso por impressão digital",
+                        "D) Liberado apenas na instituição"
+                    ],
+                    correta: 1,
+                    explicacao: "Cada participante recebe um código de acesso único que pode ser visualizado por 60 segundos no momento da inscrição, podendo solicitar reenvio à equipa."
+                },
+                {
+                    parte: 1,
+                    numero: 16,
+                    pergunta: "Qual é a duração do acesso à plataforma após uma formação presencial?",
+                    opcoes: [
+                        "A) 7 dias",
+                        "B) 15 dias",
+                        "C) 30 dias",
+                        "D) 90 dias"
+                    ],
+                    correta: 1,
+                    explicacao: "Os participantes têm acesso total aos simuladores e à biblioteca por um período de 15 dias, contado a partir do início da inscrição."
+                },
+                {
+                    parte: 1,
+                    numero: 17,
+                    pergunta: "Que incentivos existem para os alunos com melhor desempenho?",
+                    opcoes: [
+                        "A) Apenas certificado de honra",
+                        "B) Estágios remunerados de 1 a 3 meses e prémios monetários até 20.000 Kz",
+                        "C) Bolsa de estudos internacional",
+                        "D) Desconto em cursos futuros"
+                    ],
+                    correta: 1,
+                    explicacao: "Os três melhores participantes ganham estágios remunerados e os melhores grupos em desafios recebem prémios monetários até 20.000 Kz."
+                },
+                {
+                    parte: 1,
+                    numero: 18,
+                    pergunta: "Como é feito o recrutamento de novos membros para a equipa?",
+                    opcoes: [
+                        "A) Processo seletivo aberto com currículos",
+                        "B) Indicação de agências de emprego",
+                        "C) Modelo fechado, selecionados a partir de participantes que se destacam em formações",
+                        "D) Contratação por concurso público"
+                    ],
+                    correta: 2,
+                    explicacao: "A Teca Capital utiliza um modelo fechado, onde os colaboradores são selecionados exclusivamente a partir de participantes que se destacam em formações, estágios ou palestras."
+                },
+                {
+                    parte: 1,
+                    numero: 19,
+                    pergunta: "Qual é o diferencial estratégico da Teca Capital face aos concorrentes?",
+                    opcoes: [
+                        "A) Preços mais baixos",
+                        "B) Maior número de cursos",
+                        "C) Integração de simuladores sistémicos realistas que permitem aprender com o erro",
+                        "D) Parcerias internacionais"
+                    ],
+                    correta: 2,
+                    explicacao: "A Teca Capital integra simuladores sistémicos realistas que permitem aprender com o erro em cenários complexos de gestão e economia."
+                },
+                {
+                    parte: 1,
+                    numero: 20,
+                    pergunta: "Em que pilares se baseia a estratégia de fecho de parcerias?",
+                    opcoes: [
+                        "A) Apenas em números",
+                        "B) Pilar emocional (dores da instituição) e pilar lógico (números, bónus e diferenciação)",
+                        "C) Apenas em marketing",
+                        "D) Exclusivamente em networking"
+                    ],
+                    correta: 1,
+                    explicacao: "Baseia-se no pilar emocional (focado nas dores da instituição) e no pilar lógico (focado em números, bónus financeiros e diferenciação competitiva)."
+                },
+                
+                // ========== PARTE 2: COMO VENDER (20 questões) ==========
+                {
+                    parte: 2,
+                    numero: 21,
+                    pergunta: "O que é a Teca Capital, segundo o guia de vendas?",
+                    opcoes: [
+                        "A) Uma consultoria empresarial",
+                        "B) Uma EdTech angolana focada em aprendizagem prática com simuladores",
+                        "C) Uma escola de idiomas",
+                        "D) Uma empresa de marketing digital"
+                    ],
+                    correta: 1,
+                    explicacao: "A Teca Capital é uma EdTech angolana focada em aprendizagem prática, que utiliza tecnologia e simuladores para formar pessoas capazes de tomar decisões reais sem riscos."
+                },
+                {
+                    parte: 2,
+                    numero: 22,
+                    pergunta: "Como deve ser a abordagem inicial do representante?",
+                    opcoes: [
+                        "A) Tímida e hesitante",
+                        "B) Apresentação firme e confiante, indicando nome, função e que representa a Teca Capital",
+                        "C) Apenas enviar um email",
+                        "D) Ligar e desligar várias vezes"
+                    ],
+                    correta: 1,
+                    explicacao: "A abordagem deve começar com uma apresentação firme e confiante, onde o representante indica o seu nome, função e deixa claro que representa a Teca Capital."
+                },
+                {
+                    parte: 2,
+                    numero: 23,
+                    pergunta: "Qual é o conceito central do modelo de ensino da Teca?",
+                    opcoes: [
+                        "A) Aprender decorando",
+                        "B) Aprender fazendo com simuladores que replicam cenários reais",
+                        "C) Apenas teoria avançada",
+                        "D) Estudo em grupo"
+                    ],
+                    correta: 1,
+                    explicacao: "O modelo baseia-se no conceito de 'aprender fazendo', utilizando simuladores que replicam cenários reais de gestão e economia."
+                },
+                {
+                    parte: 2,
+                    numero: 24,
+                    pergunta: "Quais são as vantagens de utilizar simuladores para os estudantes?",
+                    opcoes: [
+                        "A) Economizar papel",
+                        "B) Errar, testar estratégias e aprender sem perder dinheiro, sem riscos legais",
+                        "C) Apenas entretenimento",
+                        "D) Substituir professores"
+                    ],
+                    correta: 1,
+                    explicacao: "Os simuladores permitem que o estudante erre, teste estratégias e aprenda sem perder dinheiro, sem riscos legais e sem consequências institucionais."
+                },
+                {
+                    parte: 2,
+                    numero: 25,
+                    pergunta: "Qual é o objetivo principal da conversa de vendas com uma instituição?",
+                    opcoes: [
+                        "A) Vender um único curso",
+                        "B) Propor uma parceria estratégica com participação nos ganhos",
+                        "C) Conseguir um estágio",
+                        "D) Apenas divulgar a marca"
+                    ],
+                    correta: 1,
+                    explicacao: "O objetivo não é apenas vender um serviço, mas sim propor uma parceria estratégica onde a instituição participa nos ganhos financeiros e no prestígio."
+                },
+                {
+                    parte: 2,
+                    numero: 26,
+                    pergunta: "Como a parceria valoriza a instituição de ensino perante o mercado?",
+                    opcoes: [
+                        "A) Não valoriza",
+                        "B) Oferecendo formação prática real e imersiva, aumentando atratividade",
+                        "C) Apenas com desconto",
+                        "D) Com material importado"
+                    ],
+                    correta: 1,
+                    explicacao: "A instituição passa a oferecer formação prática real e imersiva, o que aumenta a sua atratividade para novos estudantes e valorização junto dos encarregados."
+                },
+                {
+                    parte: 2,
+                    numero: 27,
+                    pergunta: "Qual é o benefício financeiro direto para a instituição parceira?",
+                    opcoes: [
+                        "A) Nenhum",
+                        "B) Entre 25% e 50% do faturamento gerado pelas formações",
+                        "C) Apenas 5%",
+                        "D) Valor fixo mensal"
+                    ],
+                    correta: 1,
+                    explicacao: "A instituição pode receber entre 25% e 50% do faturamento gerado pelas formações, dependendo do envolvimento e do número de inscritos."
+                },
+                {
+                    parte: 2,
+                    numero: 28,
+                    pergunta: "Como é formalizada a partilha de receitas?",
+                    opcoes: [
+                        "A) Apenas verbalmente",
+                        "B) Clara, contratual e real",
+                        "C) Por email informal",
+                        "D) Não é formalizada"
+                    ],
+                    correta: 1,
+                    explicacao: "A partilha de receita é clara, contratual e real, não sendo apenas um valor simbólico."
+                },
+                {
+                    parte: 2,
+                    numero: 29,
+                    pergunta: "O que diferencia a formação da Teca da teoria tradicional?",
+                    opcoes: [
+                        "A) É mais cara",
+                        "B) Os estudantes vivem cenários reais e tomam decisões complexas, sendo avaliados pelo desempenho prático",
+                        "C) Tem mais provas escritas",
+                        "D) É mais longa"
+                    ],
+                    correta: 1,
+                    explicacao: "Os estudantes vivem cenários reais e tomam decisões complexas, sendo avaliados pelo seu desempenho prático e capacidade de resolver problemas."
+                },
+                {
+                    parte: 2,
+                    numero: 30,
+                    pergunta: "Que incentivo adicional é oferecido aos melhores estudantes?",
+                    opcoes: [
+                        "A) Nenhum",
+                        "B) Estágios remunerados e oportunidades reais no ecossistema Teca",
+                        "C) Apenas certificado",
+                        "D) Desconto em cursos"
+                    ],
+                    correta: 1,
+                    explicacao: "Os melhores estudantes têm acesso a estágios remunerados e oportunidades reais dentro do ecossistema da Teca Capital."
+                },
+                {
+                    parte: 2,
+                    numero: 31,
+                    pergunta: "Qual é o ponto-chave para fechar o negócio?",
+                    opcoes: [
+                        "A) Falar muito",
+                        "B) Convite para demonstração prática do simulador",
+                        "C) Oferecer desconto",
+                        "D) Ligar todos os dias"
+                    ],
+                    correta: 1,
+                    explicacao: "O ponto-chave é o convite para a demonstração prática, onde o potencial parceiro experimenta o simulador em poucos minutos."
+                },
+                {
+                    parte: 2,
+                    numero: 32,
+                    pergunta: "Como deve comportar-se o representante durante a demonstração do simulador?",
+                    opcoes: [
+                        "A) Falar sem parar",
+                        "B) Discurso mínimo, permitindo que a experiência do simulador demonstre o valor",
+                        "C) Sair da sala",
+                        "D) Mostrar slides"
+                    ],
+                    correta: 1,
+                    explicacao: "O discurso deve ser mínimo, permitindo que a própria experiência de uso do simulador demonstre o valor pedagógico e o realismo da plataforma."
+                },
+                {
+                    parte: 2,
+                    numero: 33,
+                    pergunta: "Quem emite a certificação das formações?",
+                    opcoes: [
+                        "A) Apenas a Teca Capital",
+                        "B) Em parceria com a instituição, fortalecendo a credibilidade",
+                        "C) O governo",
+                        "D) Uma universidade estrangeira"
+                    ],
+                    correta: 1,
+                    explicacao: "A certificação é emitida em parceria com a instituição, o que fortalece a credibilidade do certificado e o nome da instituição."
+                },
+                {
+                    parte: 2,
+                    numero: 34,
+                    pergunta: "Como é garantida a segurança jurídica da parceria?",
+                    opcoes: [
+                        "A) Aperto de mãos",
+                        "B) Formalizado por contrato com cláusulas transparentes",
+                        "C) Apenas confiança",
+                        "D) Gravação da conversa"
+                    ],
+                    correta: 1,
+                    explicacao: "Todo o processo é formalizado por contrato, com cláusulas transparentes sobre percentuais, metas e responsabilidades."
+                },
+                {
+                    parte: 2,
+                    numero: 35,
+                    pergunta: "Qual é a proposta inicial sugerida para começar a parceria?",
+                    opcoes: [
+                        "A) Contrato de 5 anos",
+                        "B) Formação piloto com valores e percentuais já definidos",
+                        "C) Parceria vitalícia",
+                        "D) Apenas divulgação"
+                    ],
+                    correta: 1,
+                    explicacao: "A proposta é iniciar com uma formação piloto, com valores de inscrição, metas e percentuais já definidos."
+                },
+                {
+                    parte: 2,
+                    numero: 36,
+                    pergunta: "Qual a regra de ouro sobre a discussão de preços?",
+                    opcoes: [
+                        "A) Discutir preço primeiro",
+                        "B) Nunca discutir preços antes de apresentar o valor da solução",
+                        "C) Sempre dar desconto",
+                        "D) Esconder o preço"
+                    ],
+                    correta: 1,
+                    explicacao: "Nunca se deve discutir preços antes de apresentar o valor da solução."
+                },
+                {
+                    parte: 2,
+                    numero: 37,
+                    pergunta: "Qual é a recomendação sobre a duração do discurso do vendedor?",
+                    opcoes: [
+                        "A) Falar o máximo possível",
+                        "B) Nunca falar mais do que o necessário durante a negociação",
+                        "C) Falar apenas de si",
+                        "D) Ignorar o cliente"
+                    ],
+                    correta: 1,
+                    explicacao: "O representante deve nunca falar mais do que o necessário durante a negociação."
+                },
+                {
+                    parte: 2,
+                    numero: 38,
+                    pergunta: "É obrigatório demonstrar o simulador em todas as reuniões?",
+                    opcoes: [
+                        "A) Não, apenas quando solicitado",
+                        "B) Sim, é uma nota estratégica fundamental demonstrar sempre",
+                        "C) Apenas na primeira reunião",
+                        "D) Raramente"
+                    ],
+                    correta: 1,
+                    explicacao: "Sim, uma das notas estratégicas fundamentais é sempre demonstrar o simulador."
+                },
+                {
+                    parte: 2,
+                    numero: 39,
+                    pergunta: "Como deve ser conduzido o encerramento da conversa?",
+                    opcoes: [
+                        "A) Apressadamente",
+                        "B) Seguro e respeitoso, reforçando que a parceria coloca a instituição na linha da frente da inovação",
+                        "C) Ameaçador",
+                        "D) Indiferente"
+                    ],
+                    correta: 1,
+                    explicacao: "Deve ser seguro e respeitoso, reforçando que a parceria coloca a instituição na linha da frente da inovação educacional."
+                },
+                {
+                    parte: 2,
+                    numero: 40,
+                    pergunta: "O que o representante nunca deve prometer?",
+                    opcoes: [
+                        "A) Qualidade do serviço",
+                        "B) Algo que esteja fora do contrato formal",
+                        "C) Resultados rápidos",
+                        "D) Certificação"
+                    ],
+                    correta: 1,
+                    explicacao: "O representante está instruído a nunca prometer algo que esteja fora do contrato formal."
+                }
+            ];
+        }
+
+        bindEvents() {
+            // Registro
+            document.getElementById('formRegistro').addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.processarRegistro();
+            });
+
+            // Botão próximo
+            document.getElementById('btnProximo').addEventListener('click', () => {
+                this.proximaQuestao();
+            });
+
+            // Botões de resultado
+            document.getElementById('btnImprimirResultado').addEventListener('click', () => {
+                this.imprimirResultado();
+            });
+
+            document.getElementById('btnReiniciarQuiz').addEventListener('click', () => {
+                this.reiniciarQuiz();
+            });
+        }
+
+        processarRegistro() {
+            const nome = document.getElementById('nomeCompleto').value.trim();
+            const genero = document.getElementById('genero').value;
+            const provincia = document.getElementById('provincia').value;
+
+            if (!nome || !genero || !provincia) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+
+            this.participante = { nome, genero, provincia };
+            
+            // Esconder registro e mostrar quiz
+            document.getElementById('registroContainer').style.display = 'none';
+            document.getElementById('quizContainer').style.display = 'block';
+            
+            // Resetar estado do quiz
+            this.resetarQuiz();
+            
+            // Mostrar primeira questão
+            this.mostrarQuestao(0);
+        }
+
+        resetarQuiz() {
+            this.indiceAtual = 0;
+            this.acertos = 0;
+            this.erros = 0;
+            this.respostasUsuario = new Array(40).fill(null);
+            this.questoesRespondidas = new Array(40).fill(false);
+            
+            this.atualizarStats();
+            document.getElementById('btnProximo').disabled = true;
+        }
+
+        mostrarQuestao(indice) {
+            const questao = this.questoes[indice];
+            const parte = questao.parte === 1 ? 'Conhecimento Teca Capital' : 'Como Vender';
+            const numeroDisplay = questao.numero;
+            
+            document.getElementById('quizParte').textContent = `Parte ${questao.parte}: ${parte}`;
+            document.getElementById('questaoNumero').textContent = `Questão ${numeroDisplay}/40`;
+            
+            // Atualizar barra de progresso
+            const progresso = ((indice + 1) / 40) * 100;
+            document.getElementById('progressoPreenchimento').style.width = `${progresso}%`;
+            
+            // Mostrar pergunta
+            document.getElementById('questaoTexto').textContent = questao.pergunta;
+            
+            // Gerar opções
+            const opcoesContainer = document.getElementById('opcoesContainer');
+            opcoesContainer.innerHTML = '';
+            
+            questao.opcoes.forEach((opcao, idx) => {
+                const opcaoDiv = document.createElement('div');
+                opcaoDiv.className = 'quiz-opcao';
+                if (this.respostasUsuario[indice] !== null) {
+                    opcaoDiv.classList.add('disabled');
+                    if (idx === this.respostasUsuario[indice]) {
+                        opcaoDiv.classList.add('selecionada');
+                        if (idx === questao.correta) {
+                            opcaoDiv.classList.add('correta');
+                        } else {
+                            opcaoDiv.classList.add('incorreta');
+                        }
+                    } else if (idx === questao.correta && this.respostasUsuario[indice] !== null) {
+                        opcaoDiv.classList.add('correta');
+                    }
+                }
+                
+                opcaoDiv.innerHTML = `
+                    <span class="opcao-letra">${String.fromCharCode(65 + idx)}</span>
+                    <span class="opcao-texto">${opcao}</span>
+                    ${this.respostasUsuario[indice] !== null ? `
+                        <span class="opcao-icon">
+                            ${idx === questao.correta ? '<i class="fas fa-check"></i>' : ''}
+                            ${idx === this.respostasUsuario[indice] && idx !== questao.correta ? '<i class="fas fa-times"></i>' : ''}
+                        </span>
+                    ` : ''}
+                `;
+                
+                if (this.respostasUsuario[indice] === null) {
+                    opcaoDiv.addEventListener('click', () => this.responderQuestao(indice, idx));
+                }
+                
+                opcoesContainer.appendChild(opcaoDiv);
+            });
+            
+            // Esconder feedback se estiver visível
+            document.getElementById('feedbackContainer').style.display = 'none';
+        }
+
+        responderQuestao(indice, resposta) {
+            if (this.questoesRespondidas[indice]) return;
+            
+            const questao = this.questoes[indice];
+            const isCorreta = resposta === questao.correta;
+            
+            // Registrar resposta
+            this.respostasUsuario[indice] = resposta;
+            this.questoesRespondidas[indice] = true;
+            
+            // Atualizar contadores
+            if (isCorreta) {
+                this.acertos++;
+            } else {
+                this.erros++;
+            }
+            
+            this.atualizarStats();
+            
+            // Mostrar feedback
+            this.mostrarFeedback(questao, resposta, isCorreta);
+            
+            // Recarregar questão para mostrar resultados
+            this.mostrarQuestao(indice);
+            
+            // Habilitar botão próximo
+            document.getElementById('btnProximo').disabled = false;
+        }
+
+        mostrarFeedback(questao, resposta, isCorreta) {
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackMensagem = document.getElementById('feedbackMensagem');
+            const feedbackResposta = document.getElementById('feedbackRespostaCorreta');
+            
+            feedbackContainer.className = `quiz-feedback ${isCorreta ? 'sucesso' : 'erro'}`;
+            feedbackIcon.innerHTML = isCorreta ? 
+                '<i class="fas fa-check-circle"></i>' : 
+                '<i class="fas fa-times-circle"></i>';
+            
+            feedbackMensagem.textContent = isCorreta ? 
+                '✅ Parabéns! Você acertou!' : 
+                '❌ Resposta incorreta.';
+            
+            const letraCorreta = String.fromCharCode(65 + questao.correta);
+            const textoCorreta = questao.opcoes[questao.correta];
+            
+            feedbackResposta.innerHTML = `
+                <strong>Resposta correta:</strong> ${letraCorreta} - ${textoCorreta}<br>
+                <small style="display:block; margin-top:10px; color:#aaa;">${questao.explicacao}</small>
+            `;
+            
+            feedbackContainer.style.display = 'block';
+        }
+
+        proximaQuestao() {
+            if (this.indiceAtual < 39) {
+                this.indiceAtual++;
+                this.mostrarQuestao(this.indiceAtual);
+            } else {
+                // Final do quiz, mostrar resultado
+                this.mostrarResultado();
+            }
+        }
+
+        atualizarStats() {
+            document.getElementById('acertosCount').textContent = this.acertos;
+            document.getElementById('errosCount').textContent = this.erros;
+        }
+
+        mostrarResultado() {
+            document.getElementById('quizContainer').style.display = 'none';
+            document.getElementById('resultadoContainer').style.display = 'block';
+            
+            const percentual = Math.round((this.acertos / 40) * 100);
+            let avaliacao = '';
+            
+            if (percentual >= 90) avaliacao = 'Excelente! Domínio completo do conteúdo.';
+            else if (percentual >= 70) avaliacao = 'Bom! Precisa revisar alguns pontos.';
+            else if (percentual >= 50) avaliacao = 'Regular. Estude mais o material.';
+            else avaliacao = 'Insuficiente. Recomendamos revisar todo o conteúdo.';
+            
+            // Informações do participante
+            document.getElementById('resultadoParticipante').innerHTML = `
+                <strong>${this.participante.nome}</strong> • ${this.participante.genero} • ${this.participante.provincia}
+            `;
+            
+            // Estatísticas
+            document.getElementById('resultadoAcertos').textContent = this.acertos;
+            document.getElementById('resultadoErros').textContent = this.erros;
+            document.getElementById('resultadoPercentual').textContent = `${percentual}%`;
+            document.getElementById('resultadoAvaliacao').textContent = avaliacao;
+            
+            // Lista de questões erradas
+            this.mostrarQuestoesErradas();
+        }
+
+        mostrarQuestoesErradas() {
+            const erradasLista = document.getElementById('erradasLista');
+            erradasLista.innerHTML = '';
+            
+            const erros = [];
+            for (let i = 0; i < 40; i++) {
+                if (this.respostasUsuario[i] !== null && 
+                    this.respostasUsuario[i] !== this.questoes[i].correta) {
+                    erros.push({
+                        numero: this.questoes[i].numero,
+                        pergunta: this.questoes[i].pergunta,
+                        respostaCorreta: this.questoes[i].opcoes[this.questoes[i].correta],
+                        explicacao: this.questoes[i].explicacao
+                    });
+                }
+            }
+            
+            if (erros.length === 0) {
+                erradasLista.innerHTML = '<p style="color: #28a745; text-align: center;">🎉 Parabéns! Você acertou todas as questões!</p>';
+            } else {
+                erros.forEach(err => {
+                    const div = document.createElement('div');
+                    div.className = 'errada-item';
+                    div.innerHTML = `
+                        <div class="errada-pergunta">${err.numero}. ${err.pergunta}</div>
+                        <div class="errada-resposta">✓ ${err.respostaCorreta}</div>
+                        <div style="color: #aaa; font-size: 0.9rem; margin-top: 5px;">${err.explicacao}</div>
+                    `;
+                    erradasLista.appendChild(div);
+                });
+            }
+        }
+
+        imprimirResultado() {
+            const percentual = Math.round((this.acertos / 40) * 100);
+            
+            // Criar janela de impressão
+            const janelaImpressao = window.open('', '_blank');
+            
+            janelaImpressao.document.write(`
+                <html>
+                <head>
+                    <title>Resultado da Avaliação - Teca Capital</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 40px; background: #000; color: #fff; }
+                        .container { max-width: 800px; margin: 0 auto; }
+                        h1 { color: rgb(214, 174, 100); text-align: center; }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .info { background: #1a1a1a; padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+                        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+                        .stat { text-align: center; padding: 20px; background: #1a1a1a; border-radius: 10px; }
+                        .stat h2 { color: rgb(214, 174, 100); font-size: 36px; margin: 0; }
+                        .erros-lista { margin-top: 30px; }
+                        .erro-item { background: #1a1a1a; padding: 15px; margin-bottom: 10px; border-left: 4px solid #dc3545; }
+                        .footer { text-align: center; margin-top: 40px; color: #666; }
+                        hr { border: 1px solid #333; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>TECA CAPITAL</h1>
+                            <h3>Resultado da Avaliação de Formação</h3>
+                            <hr>
+                        </div>
+                        
+                        <div class="info">
+                            <p><strong>Nome:</strong> ${this.participante.nome}</p>
+                            <p><strong>Gênero:</strong> ${this.participante.genero}</p>
+                            <p><strong>Província:</strong> ${this.participante.provincia}</p>
+                            <p><strong>Data:</strong> ${new Date().toLocaleDateString('pt-AO')}</p>
+                        </div>
+                        
+                        <div class="stats">
+                            <div class="stat">
+                                <h2>${this.acertos}</h2>
+                                <p>Acertos</p>
+                            </div>
+                            <div class="stat">
+                                <h2>${this.erros}</h2>
+                                <p>Erros</p>
+                            </div>
+                            <div class="stat">
+                                <h2>${percentual}%</h2>
+                                <p>Aproveitamento</p>
+                            </div>
+                        </div>
+                        
+                        <div class="erros-lista">
+                            <h3 style="color: rgb(214, 174, 100);">Questões para Revisar</h3>
+                            ${this.gerarListaErrosHTML()}
+                        </div>
+                        
+                        <div class="footer">
+                            <hr>
+                            <p>Documento gerado em ${new Date().toLocaleString('pt-AO')}</p>
+                            <p>Teca Capital - Formação da Equipe</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            janelaImpressao.document.close();
+            janelaImpressao.print();
+        }
+
+        gerarListaErrosHTML() {
+            let html = '';
+            const erros = [];
+            
+            for (let i = 0; i < 40; i++) {
+                if (this.respostasUsuario[i] !== null && 
+                    this.respostasUsuario[i] !== this.questoes[i].correta) {
+                    html += `
+                        <div class="erro-item">
+                            <p><strong>Questão ${this.questoes[i].numero}:</strong> ${this.questoes[i].pergunta}</p>
+                            <p><strong>Resposta Correta:</strong> ${this.questoes[i].opcoes[this.questoes[i].correta]}</p>
+                            <p style="color: #aaa;">${this.questoes[i].explicacao}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            return html || '<p>Nenhum erro! Parabéns!</p>';
+        }
+
+        reiniciarQuiz() {
+            document.getElementById('resultadoContainer').style.display = 'none';
+            document.getElementById('registroContainer').style.display = 'block';
+            
+            // Limpar formulário
+            document.getElementById('formRegistro').reset();
+        }
+    }
+
+    // Inicializar quando o DOM estiver pronto
+    document.addEventListener('DOMContentLoaded', () => {
+        window.quizTeca = new QuizTecaCapital();
+    });
+
+})();

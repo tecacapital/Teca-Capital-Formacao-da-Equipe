@@ -227,6 +227,176 @@
         </section>
 
         <!-- ============================================ -->
+<!-- SEÇÃO 7: QUIZ INTERATIVO TECA CAPITAL -->
+<!-- ============================================ -->
+<section class="quiz-section" id="quiz">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Quiz de <span class="highlight">Formação</span></h2>
+            <p class="section-subtitle">Teste seus conhecimentos sobre a Teca Capital e técnicas de vendas</p>
+        </div>
+
+        <!-- FORMULÁRIO DE REGISTRO -->
+        <div class="quiz-registro-container" id="registroContainer">
+            <div class="quiz-registro-card card-animated">
+                <h3 class="registro-titulo">Registo do Participante</h3>
+                <p class="registro-subtitulo">Preencha os dados abaixo para iniciar o desafio</p>
+                
+                <form id="formRegistro" class="registro-form">
+                    <div class="form-grupo">
+                        <label for="nomeCompleto">Nome Completo <span class="required">*</span></label>
+                        <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Digite seu nome completo" required>
+                    </div>
+                    
+                    <div class="form-linha">
+                        <div class="form-grupo">
+                            <label for="genero">Gênero <span class="required">*</span></label>
+                            <select id="genero" name="genero" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Homem">Homem</option>
+                                <option value="Mulher">Mulher</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-grupo">
+                            <label for="provincia">Província <span class="required">*</span></label>
+                            <select id="provincia" name="provincia" required>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Bengo">Bengo</option>
+                                <option value="Benguela">Benguela</option>
+                                <option value="Bié">Bié</option>
+                                <option value="Cabinda">Cabinda</option>
+                                <option value="Cuando">Cuando</option>
+                                <option value="Cuanza Norte">Cuanza Norte</option>
+                                <option value="Cuanza Sul">Cuanza Sul</option>
+                                <option value="Cubango">Cubango</option>
+                                <option value="Cunene">Cunene</option>
+                                <option value="Huambo">Huambo</option>
+                                <option value="Huíla">Huíla</option>
+                                <option value="Icolo e Bengo">Icolo e Bengo</option>
+                                <option value="Luanda">Luanda</option>
+                                <option value="Lunda Norte">Lunda Norte</option>
+                                <option value="Lunda Sul">Lunda Sul</option>
+                                <option value="Malanje">Malanje</option>
+                                <option value="Moxico">Moxico</option>
+                                <option value="Moxico Leste">Moxico Leste</option>
+                                <option value="Namibe">Namibe</option>
+                                <option value="Uíge">Uíge</option>
+                                <option value="Zaire">Zaire</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-quiz-iniciar" id="btnIniciarQuiz">
+                        <i class="fas fa-play"></i> Iniciar Desafio
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- CONTAINER DO QUIZ (INICIALMENTE OCULTO) -->
+        <div class="quiz-container" id="quizContainer" style="display: none;">
+            <!-- CABEÇALHO DO QUIZ -->
+            <div class="quiz-header">
+                <div class="quiz-progresso-info">
+                    <span class="quiz-parte" id="quizParte">Parte 1: Conhecimento Teca Capital</span>
+                    <span class="quiz-questao-numero" id="questaoNumero">Questão 1/20</span>
+                </div>
+                <div class="quiz-progresso-bar">
+                    <div class="quiz-progresso-preenchimento" id="progressoPreenchimento" style="width: 0%;"></div>
+                </div>
+                <div class="quiz-stats">
+                    <div class="quiz-stat acertos">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="acertosCount">0</span>
+                    </div>
+                    <div class="quiz-stat erros">
+                        <i class="fas fa-times-circle"></i>
+                        <span id="errosCount">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ÁREA DA QUESTÃO -->
+            <div class="quiz-questao-container" id="questaoContainer">
+                <div class="quiz-questao-texto" id="questaoTexto">
+                    <!-- Questão será inserida aqui -->
+                </div>
+                
+                <div class="quiz-opcoes" id="opcoesContainer">
+                    <!-- Opções serão inseridas aqui -->
+                </div>
+            </div>
+
+            <!-- FEEDBACK DA RESPOSTA -->
+            <div class="quiz-feedback" id="feedbackContainer" style="display: none;">
+                <div class="feedback-icon" id="feedbackIcon">
+                    <i class="fas"></i>
+                </div>
+                <div class="feedback-mensagem" id="feedbackMensagem"></div>
+                <div class="feedback-resposta-correta" id="feedbackRespostaCorreta"></div>
+            </div>
+
+            <!-- BOTÃO PRÓXIMO -->
+            <div class="quiz-navegacao">
+                <button class="btn-quiz-proximo" id="btnProximo" disabled>
+                    Próxima Questão <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTAINER DE RESULTADO (INICIALMENTE OCULTO) -->
+        <div class="quiz-resultado-container" id="resultadoContainer" style="display: none;">
+            <div class="quiz-resultado-card card-animated">
+                <div class="resultado-header">
+                    <i class="fas fa-trophy resultado-trofeu"></i>
+                    <h3 class="resultado-titulo">Resultado da Avaliação</h3>
+                </div>
+                
+                <div class="resultado-info-participante" id="resultadoParticipante">
+                    <!-- Nome será inserido aqui -->
+                </div>
+                
+                <div class="resultado-estatisticas">
+                    <div class="resultado-stat">
+                        <span class="stat-valor" id="resultadoAcertos">0</span>
+                        <span class="stat-label">Acertos</span>
+                    </div>
+                    <div class="resultado-stat">
+                        <span class="stat-valor" id="resultadoErros">0</span>
+                        <span class="stat-label">Erros</span>
+                    </div>
+                    <div class="resultado-stat">
+                        <span class="stat-valor" id="resultadoPercentual">0%</span>
+                        <span class="stat-label">Aproveitamento</span>
+                    </div>
+                </div>
+                
+                <div class="resultado-avaliacao" id="resultadoAvaliacao">
+                    <!-- Avaliação textual será inserida aqui -->
+                </div>
+                
+                <div class="resultado-questoes-erradas" id="questoesErradasContainer">
+                    <h4>Questões para Revisar</h4>
+                    <div class="erradas-lista" id="erradasLista">
+                        <!-- Lista de questões erradas será inserida aqui -->
+                    </div>
+                </div>
+                
+                <div class="resultado-acoes">
+                    <button class="btn-resultado" id="btnImprimirResultado">
+                        <i class="fas fa-print"></i> Imprimir Resultado
+                    </button>
+                    <button class="btn-resultado" id="btnReiniciarQuiz">
+                        <i class="fas fa-redo-alt"></i> Refazer Quiz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <!-- ============================================ -->
         <!-- SEÇÃO 5: BENEFÍCIOS DA FORMAÇÃO (CRIADA) -->
         <!-- ============================================ -->
         <section class="benefits-section">
